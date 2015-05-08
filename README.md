@@ -1,5 +1,5 @@
-Process EEG singnal to entropy
-==============================
+Process EEG signal to entropy
+=============================
 
 Convert EEG timeseries (csv file) to entropy by time window. (wip)
 
