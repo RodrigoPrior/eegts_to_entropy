@@ -1,38 +1,37 @@
-import optparse
+import argparse
 import entropy
 
 
-parser = optparse.OptionParser('usage %prog -f <eeg csv file>')
+parser = argparse.ArgumentParser(
+    prog='entropycli',
+    description='Convert EEG timeseries (csv file) to entropy by time window.',
+    usage='python entropycli -f <eeg csv file>'
+    )
 
-parser.add_option(
-    '-f', dest='inputFile', type='string',
-    help='specify eeg csv file')
+parser.add_argument('-f', dest='inputFile', help='specify eeg csv file')
 
-parser.add_option(
-    '-H', dest='inputHeader', type='string',
+parser.add_argument(
+    '-H', '--header', dest='inputHeader',
+    default=['time', 'F1', 'F2', 'F7', 'F3', 'Fz', 'F4', 'F8', 'T3', 'C3',
+             'Cz', 'C4', 'T4', 'T5', 'P3', 'Pz', 'P4', 'T6', 'O1', 'Oz', 'O2'],
     help="""specify eeg csv file header to process.
 It is possible to exclude unused fileds.
 default=['time','F1','F2','F7','F3','Fz','F4','F8','T3','C3','Cz','C4','T4',
 'T5','P3','Pz','P4','T6','O1','Oz','O2']""")
 
-parser.add_option(
-    '-w', dest='inputWindow', type='string',
-    help='specify time window in secondes. Default 2')
+parser.add_argument(
+    '--window', dest='inputWindow', type=int, default=2,
+    help='specify time window in seconds. Default 2s')
 
-parser.add_option(
-    '--freq', dest='inputFreq', type='string',
-    help='specify eeg frequency (Hz). Default 256')
+parser.add_argument(
+    '--freq', dest='inputFreq', type=int, default=256,
+    help='specify eeg frequency (Hz). Default 256Hz')
 
-(options, args) = parser.parse_args()
-inputFile = options.inputFile
-inputHeader = options.inputHeader
-inputWindow = options.inputWindow
-inputFreq = options.inputFreq
+args = parser.parse_args()
 
-if (inputFile is None):
-    print (parser.usage)
+if not args.inputFile:
+    parser.print_help()
     exit(0)
 
-entropy.process_csv(
-    fname=inputFile, header=inputHeader)
-# TODO: add the followind inputs: window=inputWindow, frequency=inputFreq)
+entropy.process_csv(fname=args.inputFile, header=args.inputHeader,
+                    window=args.inputWindow, frequency=args.inputFreq)
