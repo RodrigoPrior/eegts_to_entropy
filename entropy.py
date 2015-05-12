@@ -43,3 +43,4 @@ def process_csv(fname, window=2, frequency=256,
     df = pd.read_csv(fname, parse_dates=True, index_col='time', usecols=header)
     output = eegts_to_entropy(df=df, window=window, frequency=frequency)
     output.to_csv(fname+'.'+str(window)+'s_'+str(frequency)+'hz'+'.entropy')
+    print (fname+'.'+str(window)+'s_'+str(frequency)+'hz'+'.entropy')
